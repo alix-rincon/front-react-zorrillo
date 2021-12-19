@@ -18,7 +18,7 @@ export const Login = (props) => {
     fetch(`http://localhost:8080/api/user/${email}/${password}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (!data.id) {
           alert("no");
           setShow(true);        
