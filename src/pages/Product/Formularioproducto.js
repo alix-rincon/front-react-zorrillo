@@ -1,15 +1,42 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
+//import ProductTable from "../../components/Table/ProductTable";
 
 const Formularioproducto = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const [Entradas, setEntradas] = useState([]);
+
+  const onSubmit = (data, e) => {
+      debugger;
+      e.preventDefault();
+    console.log(data);
+    setEntradas([...Entradas, data]);
+
+    fetch("http://localhost:8080/api/fragance/new", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => {
+        return res.text()
+      })
+      .then((data) => {
+        console.log(data);
+        //resolve(data ? JSON.parse(data) : {})
+      })
+      .catch((err) => console.error(err));
+
+    e.target.reset();
+  };
 
   return (
     <Fragment>
@@ -82,10 +109,10 @@ const Formularioproducto = () => {
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                htmlFor="presentation"
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="presentation"
             >
-                Presentación
+              Presentación
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -95,6 +122,9 @@ const Formularioproducto = () => {
               placeholder="Presentación"
               {...register("presentation", { required: true })}
             />
+            {errors.presentation && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
@@ -124,7 +154,10 @@ const Formularioproducto = () => {
                   <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                 </svg>
               </div>
-              </div>
+            </div>
+            {errors.category && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
@@ -141,25 +174,40 @@ const Formularioproducto = () => {
               placeholder="Fotografía"
               {...register("photography", { required: true })}
             />
-          </div>           
+            {errors.photography && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-full md:w-1/2 px-3 mb-8 md:mb-1">
+          <div className="w-full md:w-1/2 px-3 mb-8 md:mb-1">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="availability"
             >
-            Disponible
+              Disponible
             </label>
-             <label className="text-gray-700 inline-flex items-center">
-                <input type="radio" className="form-radio" name="availability" value="true" {...register("avaliability")}/>
-                <span className="ml-2">Si</span>
+            <label className="text-gray-700 inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio"
+                name="availability"
+                value="true"
+                {...register("avaliability")}
+              />
+              <span className="ml-2">Si</span>
             </label>
             <label className="text-gray-700 inline-flex items-center ml-6">
-                <input type="radio" className="form-radio" name="availability" value="false" {...register("avaliability")}/>
-                <span className="ml-2">No</span>
+              <input
+                type="radio"
+                className="form-radio"
+                name="availability"
+                value="false"
+                {...register("avaliability")}
+              />
+              <span className="ml-2">No</span>
             </label>
-            </div>
+          </div>
         </div>
         <div className="flex flex-wrap -mx-2 mb-6">
           <div className="w-full md:w-1/2 px-2 mb-6 md:mb-0">
@@ -193,8 +241,8 @@ const Formularioproducto = () => {
               placeholder="Cantidad"
               {...register("quantity")}
             />
-          </div>    
-         </div> 
+          </div>
+        </div>
         <button
           type="submit"
           className="mb-2 w-full px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-normal uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"

@@ -1,6 +1,10 @@
 import React, { Fragment, useState } from "react";
+import {
+  useNavigate
+} from "react-router-dom";
 
 export const Login = (props) => {
+  let navigate = useNavigate();
   const [loginForm, setLoginForm] = useState({ user: "", password: "" });
   const [show, setShow] = useState(false);
 
@@ -17,9 +21,10 @@ export const Login = (props) => {
         console.log(data);
         if (!data.id) {
           alert("no");
-          setShow(true);
+          setShow(true);        
         } else {
           sessionStorage.setItem("user_", data);
+          navigate("../home",{ replace: true});
         }
       });
   };
