@@ -1,12 +1,17 @@
 import './App.css';
 import { Login } from './pages/Login/Login';
-//import Card from './components/Card/Card'
+//import {Route} from 'react-router-dom';
+//import Navbar from './components/Navbar/Navbar';
+import { Fragment } from 'react';
+import Formularioproducto from './pages/Product/Formularioproducto';
 
 function App() {
   return (
-    <div className='container mx-auto'>
-            <Login />
-    </div>   
+    <Fragment>
+      <div className='container mx-auto'>
+          <Formularioproducto />
+      </div>   
+    </Fragment>  
   );
 }
 
